@@ -569,6 +569,20 @@ function finishBook(){
   stage.style.display = 'none';
   finaleGarden.textContent = questions.map((q,i) => answers[i] ? q.flower : '·').join(' ');
   finale.classList.add('show');
+  sendAnswers();
+}
+
+function sendAnswers(){
+  let body = "Jayden's answers 💛\n\n";
+  questions.forEach((q, i) => {
+    const val = (answers[i] || '').trim();
+    if (val) body += `${q.label}\n${val}\n\n`;
+  });
+  fetch("https://formspree.io/f/xyeygknn", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+    body: JSON.stringify({ message: body })
+  }).catch(() => {});
 }
 
 startBtn.addEventListener('click', () => {
