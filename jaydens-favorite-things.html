@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Book of Jayden's Favorite Things</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF8EC;
+    --paper:#FFFDF8;
+    --moss:#7C9473;
+    --rose:#E3A6A1;
+    --periwinkle:#9BAEE0;
+    --ink:#5B4A3F;
+    --gold:#E8B04B;
+    --line:#E7DCC9;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--cream);
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(124,148,115,0.06) 0, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(227,166,161,0.08) 0, transparent 40%);
+    font-family:'Quicksand', sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .wrap{
+    width:100%;
+    max-width:520px;
+    padding:0 20px 60px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+  }
+
+  /* Hero */
+  .hero{
+    padding:60px 0 30px;
+    text-align:center;
+  }
+  .hero .eyebrow{
+    font-size:13px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--moss);
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .hero h1{
+    font-family:'Caveat', cursive;
+    font-size:56px;
+    font-weight:700;
+    line-height:1.05;
+    margin:0 0 14px;
+  }
+  .hero h1 span{ color:var(--rose); }
+  .hero p{
+    font-size:16px;
+    line-height:1.6;
+    max-width:380px;
+    margin:0 auto;
+    opacity:0.85;
+  }
+  .start-btn{
+    margin-top:26px;
+    background:var(--rose);
+    color:#fff;
+    border:none;
+    padding:14px 30px;
+    border-radius:30px;
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    transition:transform 0.2s ease;
+  }
+  .start-btn:hover{ transform:translateY(-2px); }
+
+  /* Garden bar */
+  .garden{
+    width:100%;
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:rgba(255,248,236,0.94);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+    padding:12px 20px;
+    display:none;
+  }
+  .garden.on{ display:block; }
+  .garden-inner{
+    max-width:520px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .garden-track{
+    flex:1;
+    height:32px;
+    background:var(--paper);
+    border:1.5px dashed var(--line);
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    padding:0 10px;
+    gap:3px;
+    overflow-x:auto;
+  }
+  .garden-track .bud{
+    font-size:16px;
+    opacity:0.15;
+    transition:opacity 0.4s ease, transform 0.4s ease;
+    transform:scale(0.6);
+    flex-shrink:0;
+  }
+  .garden-track .bud.bloomed{
+    opacity:1;
+    transform:scale(1.1);
+  }
+  .garden-count{
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--moss);
+    white-space:nowrap;
+  }
+
+  /* Stage */
+  .stage{
+    flex:1;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:30px 0;
+  }
+  .card{
+    width:100%;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:30px 26px;
+    box-shadow:0 3px 0 var(--line);
+    position:relative;
+    opacity:0;
+    transform:translateX(30px) scale(0.97);
+    transition:opacity 0.4s ease, transform 0.4s ease;
+    display:none;
+  }
+  .card.active{
+    display:block;
+    opacity:1;
+    transform:translateX(0) scale(1);
+  }
+  .card.leaving{
+    opacity:0;
+    transform:translateX(-30px) scale(0.97);
+  }
+  .card .num{
+    position:absolute;
+    top:-13px;
+    left:22px;
+    background:var(--rose);
+    color:#fff;
+    font-family:'Caveat', cursive;
+    font-size:19px;
+    font-weight:700;
+    padding:2px 12px;
+    border-radius:12px;
+    transform:rotate(-4deg);
+  }
+  .card .icon{
+    font-size:30px;
+    margin-bottom:10px;
+    display:block;
+  }
+  .card label{
+    display:block;
+    font-family:'Caveat', cursive;
+    font-size:27px;
+    font-weight:700;
+    margin-bottom:5px;
+  }
+  .card .sub{
+    font-size:13.5px;
+    opacity:0.7;
+    margin-bottom:16px;
+  }
+  .card input, .card textarea{
+    width:100%;
+    border:none;
+    border-bottom:2px solid var(--line);
+    background:transparent;
+    font-family:'Quicksand', sans-serif;
+    font-size:16px;
+    color:var(--ink);
+    padding:8px 2px;
+    outline:none;
+    resize:none;
+    transition:border-color 0.3s ease;
+  }
+  .card input:focus, .card textarea:focus{ border-color:var(--rose); }
+  .card input::placeholder, .card textarea::placeholder{ color:#c8bba8; }
+
+  .next-btn{
+    margin-top:22px;
+    background:var(--moss);
+    color:#fff;
+    border:none;
+    padding:12px 26px;
+    border-radius:26px;
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    cursor:pointer;
+    transition:transform 0.2s ease, opacity 0.2s ease;
+    opacity:0.4;
+    pointer-events:none;
+  }
+  .next-btn.ready{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .next-btn:hover.ready{ transform:translateY(-2px); }
+  .skip{
+    display:block;
+    margin:12px auto 0;
+    background:none;
+    border:none;
+    font-family:'Quicksand', sans-serif;
+    font-size:12.5px;
+    color:var(--ink);
+    opacity:0.45;
+    cursor:pointer;
+    text-decoration:underline;
+  }
+
+  /* Reaction overlay */
+  .reaction{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity 0.3s ease;
+    z-index:5;
+  }
+  .reaction.show{ opacity:1; }
+  .reaction-bubble{
+    background:var(--gold);
+    color:#fff;
+    font-family:'Caveat', cursive;
+    font-size:28px;
+    font-weight:700;
+    padding:16px 30px;
+    border-radius:24px;
+    box-shadow:0 6px 20px rgba(232,176,75,0.4);
+    transform:scale(0.7);
+    transition:transform 0.35s cubic-bezier(.34,1.56,.64,1);
+  }
+  .reaction.show .reaction-bubble{ transform:scale(1); }
+  .confetti{
+    position:absolute;
+    font-size:20px;
+    opacity:0;
+  }
+  .reaction.show .confetti{
+    animation:pop-fly 0.9s ease forwards;
+  }
+
+  @keyframes pop-fly{
+    0%{ opacity:0; transform:translate(0,0) scale(0.5) rotate(0deg); }
+    15%{ opacity:1; }
+    100%{ opacity:0; transform:var(--fly) scale(1.1) rotate(200deg); }
+  }
+
+  /* Finale */
+  .finale{
+    width:100%;
+    text-align:center;
+    background:linear-gradient(180deg, var(--paper), #FDF6E8);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:38px 26px;
+    display:none;
+  }
+  .finale.show{
+    display:block;
+    animation:pop 0.5s ease;
+  }
+  @keyframes pop{
+    from{opacity:0; transform:scale(0.9);}
+    to{opacity:1; transform:scale(1);}
+  }
+  .finale h2{
+    font-family:'Caveat', cursive;
+    font-size:36px;
+    margin:0 0 10px;
+    color:var(--moss);
+  }
+  .finale p{
+    font-size:15px;
+    line-height:1.6;
+    opacity:0.85;
+    margin:0 0 20px;
+  }
+  .finale-garden{
+    font-size:28px;
+    letter-spacing:5px;
+    margin-bottom:22px;
+  }
+  .love-note{
+    font-family:'Caveat', cursive;
+    font-size:23px;
+    color:var(--rose);
+    background:var(--paper);
+    border:1px dashed var(--rose);
+    border-radius:16px;
+    padding:16px 20px;
+    margin:0 auto 26px;
+    max-width:380px;
+    transform:rotate(-1.5deg);
+    line-height:1.4;
+  }
+  button.save{
+    background:var(--moss);
+    color:#fff;
+    border:none;
+    padding:14px 28px;
+    border-radius:30px;
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    transition:transform 0.2s ease, background 0.2s ease;
+  }
+  button.save:hover{ transform:translateY(-2px); background:#6a8362; }
+  .keepsake{
+    margin-top:24px;
+    text-align:left;
+    background:var(--paper);
+    border:1px dashed var(--line);
+    border-radius:16px;
+    padding:18px 20px;
+    font-size:14.5px;
+    line-height:1.9;
+    display:none;
+    white-space:pre-wrap;
+  }
+  .keepsake.show{ display:block; }
+  .keepsake b{ color:var(--rose); }
+
+  footer{
+    text-align:center;
+    margin-top:30px;
+    padding-bottom:10px;
+    font-size:13px;
+    opacity:0.55;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="garden" id="gardenBar">
+  <div class="garden-inner">
+    <span class="garden-count" id="gardenCount">0 / 0</span>
+    <div class="garden-track" id="gardenTrack"></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="hero" id="hero">
+    <div class="eyebrow">a small, nosy project</div>
+    <h1>Jayden's Book of <span>Favorite Things</span></h1>
+    <p>One question at a time, no peeking ahead. Answer honestly, skip if you want — just see where it takes you.</p>
+    <button class="start-btn" id="startBtn">Open the book 🌱</button>
+  </div>
+
+  <div class="stage" id="stage" style="display:none;"></div>
+
+  <div class="finale" id="finale">
+    <h2>look at that — a whole garden</h2>
+    <p>Thank you for filling this in. Every little answer is getting tucked away safely, just for the person who made this for you.</p>
+    <div class="finale-garden" id="finaleGarden"></div>
+    <div class="love-note">ps. do you know that i love you 3000, and i'd leave my cp03 with you 💛</div>
+    <button class="save" id="saveBtn">Reveal my keepsake page 💌</button>
+    <div class="keepsake" id="keepsake"></div>
+  </div>
+
+  <footer>made with a little too much care, just for you 🌱</footer>
+</div>
+
+<script>
+const questions = [
+  {icon:"🎨", flower:"🌸", label:"What color makes you happiest?", sub:"The one you'd paint a whole room, if you could.", placeholder:"e.g. a really warm orange..."},
+  {icon:"☁️", flower:"🌙", label:"What's your favorite shape of clouds?", sub:"The kind you point at and go, that's totally a...", placeholder:"e.g. a dragon, a dog, a floating island..."},
+  {icon:"🍜", flower:"🌷", label:"What's a food you'd never get tired of?", sub:"Desert island meal, no substitutions.", placeholder:"e.g. my mom's fried rice..."},
+  {icon:"🎧", flower:"🌻", label:"A song stuck in your heart lately?", sub:"Doesn't have to be new. Just true.", placeholder:"e.g. that one song that gets me every time..."},
+  {icon:"🗺️", flower:"🌼", label:"Somewhere you feel completely yourself?", sub:"A place, real or imagined.", placeholder:"e.g. my room at 2am..."},
+  {icon:"🎬", flower:"🌾", label:"What's your favorite movie?", sub:"The one you'd rewatch without thinking twice.", placeholder:"e.g. the one I quote too much..."},
+  {icon:"🌤️", flower:"🌺", label:"Do you look up at the sky while you walk?", sub:"Just curious if you're a sky-watcher.", placeholder:"e.g. only when something catches my eye..."},
+  {icon:"🎮", flower:"🍄", label:"What's your favorite game?", sub:"Video, board, backyard — you decide.", placeholder:"e.g. the one I always go back to..."},
+  {icon:"🎭", flower:"🌹", label:"A character that lives in your head rent free?", sub:"The one you think about for no reason at all.", placeholder:"e.g. a random cartoon character..."},
+  {icon:"💫", flower:"🍀", label:"What's your favorite thing about yourself?", sub:"No modesty allowed here.", placeholder:"e.g. my laugh, how I remember small things..."},
+  {icon:"📖", flower:"🌵", label:"A small thing that makes a good day great?", sub:"Doesn't have to be big to count.", placeholder:"e.g. finding money in an old jacket..."},
+  {icon:"🎶", flower:"🪷", label:"If you wanted someone to remember you by one song, what would it be?", sub:"The one that feels the most like you.", placeholder:"e.g. the song I'd want playing in someone's memory of me..."},
+  {icon:"🌠", flower:"✨", label:"If a wish could come true, what would you wish for?", sub:"Big, small, secret — anything goes.", placeholder:"e.g. more time with the people I love..."}
+];
+
+const reactions = [
+  "ooh i love that",
+  "okay noted 🌱",
+  "cute answer!",
+  "tucking that away safely",
+  "i see you",
+  "saving that one 💛",
+  "that's so you",
+  "aw, good one",
+  "hehe okay",
+  "that's a good answer"
+];
+
+const confettiEmoji = ["✨","🌸","💛","🌿","⭐"];
+
+const hero = document.getElementById('hero');
+const startBtn = document.getElementById('startBtn');
+const stage = document.getElementById('stage');
+const gardenBar = document.getElementById('gardenBar');
+const gardenTrack = document.getElementById('gardenTrack');
+const gardenCount = document.getElementById('gardenCount');
+const finale = document.getElementById('finale');
+const finaleGarden = document.getElementById('finaleGarden');
+
+const answers = {};
+let current = 0;
+
+questions.forEach((q, i) => {
+  const bud = document.createElement('span');
+  bud.className = 'bud';
+  bud.textContent = q.flower;
+  bud.id = 'bud' + i;
+  gardenTrack.appendChild(bud);
+});
+gardenCount.textContent = `0 / ${questions.length}`;
+
+function buildCard(i){
+  const q = questions[i];
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = 'card' + i;
+  const useTextarea = q.label.length > 40 || i % 3 === 2;
+  card.innerHTML = `
+    <span class="num">${i + 1} / ${questions.length}</span>
+    <span class="icon">${q.icon}</span>
+    <label>${q.label}</label>
+    <div class="sub">${q.sub}</div>
+    ${useTextarea
+      ? `<textarea rows="2" placeholder="${q.placeholder}"></textarea>`
+      : `<input type="text" placeholder="${q.placeholder}">`}
+    <button class="next-btn">${i === questions.length - 1 ? "Finish 🌼" : "Next →"}</button>
+    <button class="skip">skip this one</button>
+    <div class="reaction" id="reaction${i}">
+      <div class="reaction-bubble"></div>
+    </div>
+  `;
+  stage.appendChild(card);
+
+  const field = card.querySelector('input, textarea');
+  const nextBtn = card.querySelector('.next-btn');
+  const skipBtn = card.querySelector('.skip');
+
+  field.addEventListener('input', () => {
+    nextBtn.classList.toggle('ready', field.value.trim().length > 0);
+  });
+  field.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !(field.tagName === 'TEXTAREA')) {
+      e.preventDefault();
+      if (field.value.trim().length > 0) advance(i, field.value.trim());
+    }
+  });
+  nextBtn.addEventListener('click', () => {
+    if (field.value.trim().length > 0) advance(i, field.value.trim());
+  });
+  skipBtn.addEventListener('click', () => advance(i, ''));
+
+  return card;
+}
+
+function advance(i, value){
+  answers[i] = value;
+  const bud = document.getElementById('bud' + i);
+  if (value){
+    bud.classList.add('bloomed');
+    showReaction(i);
+  }
+  const filledCount = Object.values(answers).filter(v => v && v.trim().length > 0).length;
+  gardenCount.textContent = `${filledCount} / ${questions.length}`;
+
+  const delay = value ? 850 : 150;
+  setTimeout(() => {
+    const card = document.getElementById('card' + i);
+    card.classList.add('leaving');
+    setTimeout(() => {
+      card.classList.remove('active', 'leaving');
+      card.style.display = 'none';
+      current = i + 1;
+      if (current < questions.length){
+        showCard(current);
+      } else {
+        finishBook();
+      }
+    }, 400);
+  }, delay);
+}
+
+function showReaction(i){
+  const reaction = document.getElementById('reaction' + i);
+  const bubble = reaction.querySelector('.reaction-bubble');
+  bubble.textContent = reactions[Math.floor(Math.random() * reactions.length)];
+  reaction.innerHTML = `<div class="reaction-bubble">${bubble.textContent}</div>`;
+  for (let c = 0; c < 5; c++){
+    const conf = document.createElement('span');
+    conf.className = 'confetti';
+    conf.textContent = confettiEmoji[Math.floor(Math.random() * confettiEmoji.length)];
+    const angle = (Math.random() * 2 - 1) * 80;
+    const dist = 60 + Math.random() * 50;
+    const x = Math.sin(angle * Math.PI/180) * dist;
+    const y = -Math.abs(Math.cos(angle * Math.PI/180) * dist) - 20;
+    conf.style.setProperty('--fly', `translate(${x}px, ${y}px)`);
+    conf.style.left = '50%';
+    conf.style.top = '55%';
+    conf.style.animationDelay = (c * 0.04) + 's';
+    reaction.appendChild(conf);
+  }
+  reaction.classList.add('show');
+  setTimeout(() => reaction.classList.remove('show'), 800);
+}
+
+function showCard(i){
+  let card = document.getElementById('card' + i);
+  if (!card) card = buildCard(i);
+  card.style.display = 'block';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => card.classList.add('active'));
+  });
+  const field = card.querySelector('input, textarea');
+  setTimeout(() => field.focus(), 350);
+}
+
+function finishBook(){
+  stage.style.display = 'none';
+  finaleGarden.textContent = questions.map((q,i) => answers[i] ? q.flower : '·').join(' ');
+  finale.classList.add('show');
+}
+
+startBtn.addEventListener('click', () => {
+  hero.style.display = 'none';
+  stage.style.display = 'flex';
+  gardenBar.classList.add('on');
+  showCard(0);
+});
+
+document.getElementById('saveBtn').addEventListener('click', () => {
+  const keepsake = document.getElementById('keepsake');
+  let text = '';
+  questions.forEach((q, i) => {
+    const val = (answers[i] || '').trim();
+    if (val) text += `${q.flower} <b>${q.label}</b>\n${val}\n\n`;
+  });
+  keepsake.innerHTML = text.replace(/\n/g, '<br>');
+  keepsake.classList.add('show');
+  document.getElementById('saveBtn').style.display = 'none';
+});
+</script>
+
+</body>
+</html>
